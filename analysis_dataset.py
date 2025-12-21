@@ -15,15 +15,16 @@ merged= merged.rename(columns={"CO2 per capita":"CO2 per capita (Trillions)","Po
 
 merged["GDP (Trillions USD($))"]=merged["GDP"]/1e12
 merged["Population (Millions)"]=merged["Population (Millions)"]/1e6
+merged["GDP per capita (Thousand USD ($))"] = (merged["GDP (Trillions USD($))"]*1e6 / merged["Population (Millions)"])
 
 # if "Code" in merged.columns:
 #     merged = merged.drop(columns=["Code"])
 
-if "GDP" in merged.columns:
-    merged=merged.drop(columns=["GDP"])
+# if "GDP" in merged.columns:
+#     merged=merged.drop(columns=["GDP"])
     
-if "," in merged.columns:
-    merged=merged.drop(columns=[","])
+# if "," in merged.columns:
+#     merged=merged.drop(columns=[","])
 
 merged = merged.reset_index(drop=True)
 
