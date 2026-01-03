@@ -43,14 +43,14 @@ for country in countries:
         x_forecast[historical],
         y_forecast[historical],
         color=colors[country],
-        linewidth=1,
+        linewidth=1.5,
     )          
     
     plt.plot(x_forecast[future],
                 y_forecast[future],
                 color=colors[country],
                 linestyle="--",
-                linewidth=2,
+                linewidth=2.5,
                 label=f"{country} forecasting")
 
     plt.scatter(x_train,
@@ -63,6 +63,7 @@ for country in countries:
 plt.xlabel("Year")
 plt.ylabel("CO2 emissions per capita (tonnes)")
 plt.title("CO2 emissions forecasting for the next 10 years")
+plt.axvline(x=2024,color="grey",linestyle="-",linewidth=1.5,alpha=0.7)
 plt.ylim(-0.2,None)
 plt.grid(True,alpha=0.4)
 
