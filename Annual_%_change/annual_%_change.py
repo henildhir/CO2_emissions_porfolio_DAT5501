@@ -70,7 +70,7 @@ for ax in axes:
     ax.text(2008.5,y_top,"2008 financial crisis",ha="center",va="top",fontsize=8,color="black")
 
 #makes sure that the plot is saved within the graphs folder and validates whether a folder for graphs has been createed or not
-folder="Graphs"
+folder="Annual_%_change"
 os.makedirs(folder,exist_ok=True)
 plt.savefig(os.path.join(folder,"co2_gdp_annual_%_change.png"))
 

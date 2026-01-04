@@ -9,7 +9,7 @@ import os
 
 #Reads dataset and validates whether folder for graph has been created
 dataset = pd.read_csv("analysis_dataset.csv")
-folder="Graphs"
+folder="Co2_emissions_vs_gdp_per_capita"
 os.makedirs(folder,exist_ok=True)
 
 #filters the dataset for minimum and maximum years and creates an array of plots

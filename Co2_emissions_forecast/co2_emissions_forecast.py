@@ -83,7 +83,7 @@ plt.grid(True,alpha=0.4)
 plt.legend(loc="best",fontsize="small")
 
 #Validates whether folder for graph has been created and saves plot with desired file name within folder
-folder="Graphs"
+folder="Co2_emissions_forecast"
 os.makedirs(folder,exist_ok=True)
 plt.savefig(os.path.join(folder,"co2_emissions_forecasting.png"))
 plt.tight_layout()
