@@ -1,6 +1,6 @@
 # CO2 Emissions per Capita and GDP per Capita – Annual Percentage Change Analysis
 
-This project analyses how **World CO2 emissions per capita** and **World GDP per capita** have changed annually since 1980, with a particular focus on the **2008 financial crisis**. The analysis is part of a broader business problem: understanding how global economic shocks affect emissions, which is relevant for firms and investors exposed to carbon‑intensive activities and transition risk.
+This folder analyses how **World CO2 emissions per capita** and **World GDP per capita** have changed annually since 1980, with a particular focus on the **2008 financial crisis**. The analysis is part of a broader business problem: understanding how global economic shocks affect emissions, which is relevant for firms and investors exposed to carbon‑intensive activities and transition risk.
 
 The main script described here is `annual_%_change.py`. It produces a figure with two time‑series plots:
 
@@ -50,10 +50,18 @@ In this case, the unit case of the entire world has been chosen to show the annu
 
 ---
 
+## Interpretive Insight
+
+The graph shows that around the **2008 financial crisis** there is a noticeable drop in both GDP per capita and CO2 emissions per capita. This suggests that major economic shocks can temporarily reduce emissions because industrial activity, transport, and energy demand all contract when GDP falls.
+
+This is useful because it links the performance of the economy to environmental pressure: when markets crash and firms cut production and logistics, emissions decline, but for negative reasons (recession) rather than through planned decarbonisation. The graph therefore helps distinguish between emissions reductions driven by economic downturns and those driven by deliberate climate policy.
+
+---
+
 ## Requirements
 
-- Python 3.x
+- latest python version
 - Libraries:
   - `pandas`
   - `matplotlib`
-  - `os` (standard library)
+  - `os` 
