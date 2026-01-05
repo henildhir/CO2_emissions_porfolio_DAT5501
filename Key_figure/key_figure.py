@@ -48,7 +48,7 @@ plt.legend(handles=new_handles,labels=new_labels,title="Country/Event",loc="best
 plt.tight_layout()
 
 #predefined folder to save the graph 
-folder="Key figure"
+folder="Key_figure"
 #validates whether that folder has been created before, if not it will create one
 os.makedirs(folder,exist_ok=True)
 plt.savefig(os.path.join(folder,"key_figure.png"))
