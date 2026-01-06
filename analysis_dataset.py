@@ -46,4 +46,4 @@ def analysis_dataset_merging():
     merged.to_csv("analysis_dataset.csv", index="False")
 
 if __name__ == "__main__":
-    analysis_dataset_merging():
+    analysis_dataset_merging()
