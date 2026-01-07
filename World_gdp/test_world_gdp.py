@@ -1,41 +1,40 @@
+#imports all relevant libraries
 import unittest
 import pandas as pd
 import world_gdp
 
 class TestWorldGDP(unittest.TestCase):
     def setUp(self):
-        # Minimal synthetic dataset in the same *shape* as the real one
+        #function sets up a sample dataframe used for validation later on with similar column
         self.df = pd.DataFrame(
-            {
-                "Country Name": ["India", "India", "Brazil"],
+            {"Country Name": ["India", "India", "Brazil"],
                 "Country Code": ["IND", "IND", "BRA"],
                 "Indicator Name": ["GDP (current US$)"] * 3,
                 "Indicator Code": ["NY.GDP.MKTP.CD"] * 3,
                 "1979": [100.0, 200.0, 300.0],
                 "1980": [110.0, 210.0, 310.0],
-                "1981": [120.0, 220.0, 320.0],
-            }
-        )
+                "1981": [120.0, 220.0, 320.0],})
 
+    #tests the filtered dataset and converts to long format for easier plotting
     def test_filter_and_convert_to_long(self):
-        # filter selected countries and years >= 1980
+        #filter selected countries and years >= 1980
         filtered = world_gdp.filter(self.df)
 
-        # only specified countries should remain (India is in list, Brazil is not)
+        #only specified countries should remain (India is in list, Brazil is not)
         self.assertTrue((filtered["Country Name"].unique() == ["India"]).all())
 
-        # correct year columns kept
+        #correct year columns kept
         self.assertNotIn("1979", filtered.columns)
         self.assertIn("1980", filtered.columns)
         self.assertIn("1981", filtered.columns)
 
-        # convert to long
+        #convert to long
         long_df = world_gdp.convert_to_long(filtered)
 
-        # columns should be exactly these three (order not important in assert)
+        #columns should be exactly these three (order not important in assert)
         self.assertCountEqual(long_df.columns.tolist(), ["Country Name", "Year", "GDP"])
 
-        # number of rows = countries_after_filter * number_of_year_columns
+        #number of rows = countries_after_filter * number_of_year_columns
         num_countries_rows = len(filtered)            # here: 2 India rows
         num_year_cols = 2                             # 1980, 1981
         expected_rows = num_countries_rows * num_year_cols  # 2 * 2 = 4

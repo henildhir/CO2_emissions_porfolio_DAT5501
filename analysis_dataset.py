@@ -40,8 +40,6 @@ def analysis_dataset_merging():
     merged = merged.reset_index(drop=True)
 
     print(merged.head())
-    print(merged.columns)
-
     #saves the dataset to a defined csv file excluding index values
     merged.to_csv("analysis_dataset.csv", index="False")
 

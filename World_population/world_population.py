@@ -1,6 +1,7 @@
 #imports relevants functions used within this file
 import pandas as pd
 
+#loads the predefined filepath ready to be analysed
 def load():
     #uses pandas to read csv file and skips first 4 rows as they do not contain any data
     world_population = pd.read_csv("World_population/world_population.csv", skiprows=4)
@@ -18,8 +19,8 @@ def filter(world_population):
     world_population_filtered = world_population_filtered[["Country Name"] + year_cols]
     return world_population_filtered
 
+#converts from wide format to long format as original dataset contains multiple columns
 def convert_to_long(world_population_filtered):
-    #converts from wide format to long format as original dataset contains multiple columns
     year_cols = [c for c in world_population_filtered.columns if c.isdigit()]
     world_population_long = world_population_filtered.melt(
         id_vars="Country Name",
@@ -29,17 +30,17 @@ def convert_to_long(world_population_filtered):
     )
     return world_population_long
 
+#sorts the data by country and year, making it easier for analysing data 
 def sort_and_fix(world_population_long):
-    #Sorts the data by country and year, making it easier for analysing data 
     world_population_long = world_population_long.sort_values(
         by=["Country Name", "Year"],
-        ascending=[True, True]
-    )
+        ascending=[True, True])
 
     #validates datatype in year column to ensure all data values are integers
     world_population_long["Year"] = world_population_long["Year"].astype(int)
     return world_population_long
 
+#cleans entire dataset, including long format and fixing any values that are null
 def world_population_cleaning():
     # full pipeline using the smaller functions
     world_population = load()
@@ -54,7 +55,6 @@ def world_population_cleaning():
     )
     print("Run Successfully")
     return world_population_long
-
 
 if __name__ == "__main__":
     world_population_cleaning()

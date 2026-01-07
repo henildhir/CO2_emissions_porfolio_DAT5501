@@ -4,14 +4,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+#loads the predefined filepath ready to be analysed
 def load(filepath):
-    #Reads the analysis dataset, puts it into a variable and converts the year column to numeric values
     dataset=pd.read_csv(filepath)
     dataset["Year"]=pd.to_numeric(dataset["Year"],errors="coerce")
     return dataset
 
 def key_figure_creation(dataset):
-
         #plot given appropriate figure size and a lineplot is created using seaborn which given attributes and x and y values
         #plot shows co2 per capita over time for each country
         plt.figure(figsize=(10,6))
@@ -22,13 +21,13 @@ def key_figure_creation(dataset):
                 linewidth=2,
                 markersize=5)
 
-        #Axis labels, titles and legend added to plot
+        #axis labels, titles and legend added to plot
         plt.xlabel=("Year")
         plt.ylabel("Co2 emissions per capita (tonnes)")
         plt.title("CO2 emissions per capita (tonnes) over time since 1980")
         plt.grid(True,alpha=0.3)
 
-        #Vertical line created at 2015 to show historical events as a dashed line
+        #vertical line created at 2015 to show historical events as a dashed line
         Paris_agreement=2015
         plt.axvline(x=Paris_agreement,color="grey",linestyle="--",linewidth=1.5,alpha=0.7,label="2015 Paris Agreement")
 
@@ -49,17 +48,18 @@ def key_figure_creation(dataset):
                         new_handles.append(handles[idx])
                         new_labels.append(labels[idx])
 
+        #plots the legend to ensure consistency throughout
         plt.legend(handles=new_handles,labels=new_labels,title="Country/Event",loc="best")
         plt.tight_layout()
         fig=plt.gcf()
         return fig,ax
 
+#validates whether that folder has been created before, if not it will create one
 def save_figure(fig, folder, filename):
-        #validates whether that folder has been created before, if not it will create one
         os.makedirs(folder,exist_ok=True)
         fig.savefig(os.path.join(folder,filename))
-        
 
+#main function created to run with configuration settings of filepath, filename and folder. saves plot in given folder
 def run():
     filepath="analysis_dataset.csv"
     folder="Key_figure"

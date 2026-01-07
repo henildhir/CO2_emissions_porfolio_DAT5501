@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 
+#loads the predefined filepath ready to be analysed
 def load(filepath):
     #Reads the analysis dataset, puts it into a variable and converts the year column to numeric values
     dataset=pd.read_csv(filepath)
@@ -17,23 +18,19 @@ def co2_emissions_cleaning(dataset):
     co2_emissions=co2_emissions.rename(
         columns = {
             "Entity":"Country Name",
-            "Annual CO₂ emissions (per capita)":"CO2 per capita",
-        }
-    )
-
+            "Annual CO₂ emissions (per capita)":"CO2 per capita",})
     return co2_emissions
 
+#validates whether that folder has been created before, if not it will create one
 def save_figure(folder, filename):
-        #validates whether that folder has been created before, if not it will create one
         os.makedirs(folder,exist_ok=True)
         co2_emissions=os.path.join(folder,filename)
-        
 
+#main function created to run with configuration settings of filepath, filename and folder. saves plot in given folder
 def run():
     filepath="World_co2/co2-emissions-per-capita.csv"
     folder="World_co2"
     filename="new_co2_emissions_per_capita.png"
-
     dataset = load(filepath)
     co2_emissions_cleaning(dataset)
     save_figure(folder,filename)

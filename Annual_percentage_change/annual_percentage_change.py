@@ -3,12 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+#this function loads the dataset
 def load(filepath):
     #Reads the analysis dataset, puts it into a variable and converts the year column to numeric values
     dataset=pd.read_csv(filepath)
     dataset["Year"]=pd.to_numeric(dataset["Year"],errors="coerce")
     return dataset
 
+#this function filters for all countries and calculates their corresponding co2 percentage change and gdp percentage change
 def filter_and_calculate(dataset, countries):
     #Filters the countries for the given unit case and creates an empty list for both subplots
     subplot = []
@@ -33,6 +35,7 @@ def filter_and_calculate(dataset, countries):
     change=pd.concat(subplot, ignore_index=True)
     return change
 
+#This function creates all plots
 def create_plots(change,countries):
     #creates an array of 2 rows for both figures with a specified figure size
     fig,axes = plt.subplots(2,1,figsize=(10,9))
@@ -81,6 +84,7 @@ def save_plot(fig,folder,filename):
     filepath=(os.path.join(folder,filename))
     fig.savefig(filepath)
 
+#This is the main function required to run the entire code. It contains the filepath, filename and necessary 
 def run():
     filepath="analysis_dataset.csv"
     countries=["World"]

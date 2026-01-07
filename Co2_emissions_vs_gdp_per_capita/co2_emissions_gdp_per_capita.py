@@ -7,33 +7,32 @@ import statsmodels.api as sm
 import numpy as np
 import os
 
+#loads the predefined filepath ready to be analysed
 def load(filepath):
-    #Reads the analysis dataset, puts it into a variable and converts the year column to numeric values
     dataset=pd.read_csv(filepath)
     dataset["Year"]=pd.to_numeric(dataset["Year"],errors="coerce")
     return dataset
 
+#filters dataset for the last 10 years and returns filtered dataset with minimum and maximum year
 def filter_10_years(dataset): 
-    #filters the dataset for minimum and maximum years and creates an array of plots
     max_year=dataset["Year"].max()
     min_year=max_year-9
     filter=dataset[(dataset["Year"]>=min_year)&(dataset["Year"]<=max_year)]
     return filter,min_year,max_year
 
+#selects the x and y values from the dataset by filtering for 'World' 
 def select(dataset):
-    #filters dataset for given country and converts appropriate x and y values from given dataset
     world=dataset[dataset["Country Name"]=="World"].copy()
+    #only values for x and y are copied
     x=world["GDP per capita"].values
     y=world["CO2 per capita (Trillions)"].values
     return x,y
 
+#performs regression using pearsonr with x and y values
 def regression(x,y):
-    #computes pearson correlation between gdp per capita and co2 per capita 
     r,p=pearsonr(x,y)
     X=sm.add_constant(x)
     model=sm.OLS(y,X).fit()
-
-    #generates an array of 100 x values between max and min value
     x_grid=np.linspace(x.min(),x.max(),200)
     X_grid=sm.add_constant(x_grid)
 
@@ -41,12 +40,14 @@ def regression(x,y):
     prediction=model.get_prediction(X_grid)
     prediction_summary = prediction.summary_frame(alpha=0.05)
     y_hat=prediction_summary["mean"].values
+
+    #statistoics provided show the upper and lower confidence intervals and only values are copied
     ci_lower=prediction_summary["mean_ci_lower"].values
     ci_upper=prediction_summary["mean_ci_upper"].values
     return r,x_grid,y_hat,ci_lower,ci_upper
 
+#creates figure and all plots, returns fig and axes
 def create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper):
-    #Creates figure and all plots, returns fig and axes
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
 
     #a scatter plot is created with given x and y values from filtered dataset, with appropriate colours
@@ -61,12 +62,10 @@ def create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper)
             "United Kingdom":"green",
             "World":"red",
             "India":"blue",
-            "Malawi":"orange",
-        },
-        ax=axes[0],
-    )
+            "Malawi":"orange",},
+        ax=axes[0],)
 
-    #Axis labels, titles and legend added to plot
+    #axis labels, titles and legend added to plot
     axes[0].set_xlabel("GDP per capita ($)")
     axes[0].set_ylabel("CO2 emissions per capita (tonnes)")
     axes[0].set_title("CO2 per capita vs GDP per capita (last 10 years)",fontsize=10)
@@ -79,22 +78,18 @@ def create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper)
                     y_world,
                     color="red",
                     alpha=0.55,
-                    label="World data"
-                    )
+                    label="World data")
 
     #generates values for function ax+b for any x values
     coeffs=np.polyfit(x_world,y_world,1)
     poly=np.poly1d(coeffs)
-    x_line = np.linspace(x_world.min(),
-                        x_world.max(),
-                        100)
+    x_line = np.linspace(x_world.min(),x_world.max(),100)
 
     #plots the regression line of all observed data points 
     axes[1].plot(x_line,
                 poly(x_line),
                 color="black",
-                label="Linear fit"
-                )
+                label="Linear fit")
 
     #fills blue between both CI lower and CI upper bands to emphasise the 95% confidence band
     axes[1].fill_between(
@@ -103,8 +98,7 @@ def create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper)
         ci_upper,
         color="blue",
         alpha=0.15,
-        label="95% CI"
-    )
+        label="95% CI")
 
     #Axis labels, titles and legend added to plot
     axes[1].set_xlabel("GDP per capita ($)")
@@ -129,11 +123,12 @@ def create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper)
 
     return fig,axes
 
+#saves plot with desired file name within pre-defined folder
 def save(fig,folder,filename):
-    #Saves plot with desired file name within pre-defined folder
     os.makedirs(folder, exist_ok=True)
     plt.savefig(os.path.join(folder, filename))
-    
+
+#main function created to run with configuration settings of filepath, filename and folder. saves plot in given folder
 def run():
     filepath = "analysis_dataset.csv"
     folder = "co2_emissions_vs_gdp_per_capita"
@@ -143,8 +138,8 @@ def run():
     x_world, y_world = select(dataset)
     r, x_grid, y_hat, ci_lower, ci_upper = regression(x_world, y_world)
 
-    fig, axes = create_plots(filter, x_world, y_world,
-                             r, x_grid, y_hat, ci_lower, ci_upper)
+    #plots the confidence interval including observed x and y values
+    fig, axes = create_plots(filter, x_world, y_world, r, x_grid, y_hat, ci_lower, ci_upper)
     save(fig, folder, filename)
     #shows the plots
     plt.tight_layout()
