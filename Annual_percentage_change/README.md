@@ -7,7 +7,7 @@ The main script described here is `annual_%_change.py`. It produces a figure wit
 1. Annual % change in world CO2 emissions per capita  
 2. Annual % change in world GDP per capita  
 
-A grey shaded band highlights the period 2008–2009 to show the impact of the financial crisis on both series.
+A grey shaded band highlights the period 2008–2009 to show the impact of the financial crisis on both series
 
 ---
 
@@ -37,16 +37,16 @@ In this case, the unit case of the entire world has been chosen to show the annu
 ## Design Decisions and Performance Justifications
 
 ### Vectorised calculations with pandas:
-- Annual % changes are computed using `data_country["CO2 per capita (Trillions)"].pct_change()*100` and `data_country["GDP per capita"].pct_change()*100` on whole columns instead of manual Python loops. This uses fast, C‑optimised operations and scales better if more years or countries are added.
+- Annual % changes are computed using `data_country["CO2 per capita (Trillions)"].pct_change()*100` and `data_country["GDP per capita"].pct_change()*100` on whole columns instead of manual Python loops. This uses fast, C‑optimised operations and scales better if more years or countries are added
 
 ### Per‑country filtering + single concatenation:
-- Each country is filtered once from the full dataset, processed, then all results are combined with a single pd.concat. This avoids repeated expensive concatenations inside the loop and keeps memory use and runtime low.
+- Each country is filtered once from the full dataset, processed, then all results are combined with a single pd.concat. This avoids repeated expensive concatenations inside the loop and keeps memory use and runtime low
 
 ### Single figure with shared subplots:
-- `fig,axes = plt.subplots(2,1,figsize=(10,9))` creates both graphs in one figure. Re‑using the same axes objects is more efficient than generating multiple figures and keeps drawing overhead small even when more countries are plotted.
+- `fig,axes = plt.subplots(2,1,figsize=(10,9))` creates both graphs in one figure. Re‑using the same axes objects is more efficient than generating multiple figures and keeps drawing overhead small even when more countries are plotted
 
 ### Minimal I/O:
-- The CSV is read once and the plot is written to disk once. All other work is done in memory, which is faster than repeatedly accessing the file system.
+- The CSV is read once and the plot is written to disk once. All other work is done in memory, which is faster than repeatedly accessing the file system
 
 ---
 
@@ -55,6 +55,23 @@ In this case, the unit case of the entire world has been chosen to show the annu
 The graph shows that around the **2008 financial crisis** there is a noticeable drop in both GDP per capita and CO2 emissions per capita. This suggests that major economic shocks can temporarily reduce emissions because industrial activity, transport, and energy demand all contract when GDP falls.
 
 This is useful because it links the performance of the economy to environmental pressure: when markets crash and firms cut production and logistics, emissions decline, but for negative reasons (recession) rather than through planned decarbonisation. The graph therefore helps distinguish between emissions reductions driven by economic downturns and those driven by deliberate climate policy.
+
+---
+
+## Unit Test
+
+The file `test_annual_pecentage change.py` checks that the core data processing functions behave correctly before graphs are produced
+
+- Data handling:
+    -`test_filter_and_calculate_percentage_change` verifies that filter_and_calculate correctly filters by country, returns only the requested rows, and produces expected percentage changes for a small synthetic dataset (e.g. ~10% growth for “World”)
+
+- Edge cases:
+    -`test_zero_and_constant_values` uses a country with zero/constant CO2 values to ensure the function returns NaN/Inf instead of misleading numbers when percentage change is undefined
+
+- Basic plotting check:
+    -`test_create_plot_structure` confirms that `create_plots` creates a valid Matplotlib figure with axes and appropriate axis labels, without testing visual appearance
+
+These tests provide fast, automated assurance that filtering, percentage‑change calculations, and plot setup are all working as intended
 
 ---
 

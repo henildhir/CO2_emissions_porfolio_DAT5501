@@ -6,21 +6,21 @@ This folder contains the original World Population dataset (`world_population.cs
 
 ## Features
 
-- Reads the original dataset `world_population.csv` using pandas, skipping the first 4 metadata rows as they contain no data.
+- Reads the original dataset `world_population.csv` using pandas, skipping the first 4 metadata rows as they contain no data
 - Filters the data to include only the following countries:  
   - United Kingdom  
   - India  
   - Malawi  
   - World (aggregate)
-- Selects only the year columns from 1980 onwards, focusing on recent data.
-- Retains the `"Country Name"` column and the filtered year columns.
+- Selects only the year columns from 1980 onwards, focusing on recent data
+- Retains the `"Country Name"` column and the filtered year columns
 - Converts the dataset from wide format (one column per year) to long format with three columns:  
   - `"Country Name"`  
   - `"Year"`  
   - `"Population"`  
-- Sorts the data by `"Country Name"` and `"Year"` in ascending order for easier analysis.
-- Validates and converts the `"Year"` column to integer type.
-- Saves the cleaned and transformed dataset to `new_world_population.csv` without the index column for simplicity.
+- Sorts the data by `"Country Name"` and `"Year"` in ascending order for easier analysis
+- Validates and converts the `"Year"` column to integer type
+- Saves the cleaned and transformed dataset to `new_world_population.csv` without the index column for simplicity
 
 ---
 
@@ -28,18 +28,18 @@ This folder contains the original World Population dataset (`world_population.cs
 
 ### Original Dataset: `world_population.csv`
 
-- Contains 4 initial metadata rows that are skipped during loading.
-- Wide format with separate columns for each year starting from 1960.
-- Covers a comprehensive set of countries and regions worldwide.
-- Reports total population counts.
-- Includes some missing data cells.
+- Contains 4 initial metadata rows that are skipped during loading
+- Wide format with separate columns for each year starting from 1960
+- Covers a comprehensive set of countries and regions worldwide
+- Reports total population counts
+- Includes some missing data cells
 
 ### Cleaned Dataset: `new_world_population.csv`
 
-- Filters to keep only select countries.
-- Includes only data from 1980 onward.
-- Data shown in long format ideal for time series and statistical analysis.
-- Each row contains one country-year-population record.
+- Filters to keep only select countries
+- Includes only data from 1980 onward
+- Data shown in long format ideal for time series and statistical analysis
+- Each row contains one country-year-population record
 
 ---
 
@@ -55,17 +55,17 @@ This folder contains the original World Population dataset (`world_population.cs
 
 ### Wide to Long Format Conversion
 
-- Using `pandas.melt` facilitates reshaping to an analysis-friendly format widely supported by visualisation and modeling tools.
-- Vectorised transformation is efficient and scales well.
+- Using `pandas.melt` facilitates reshaping to an analysis-friendly format widely supported by visualisation and modeling tools
+- Vectorised transformation is efficient and scales well
 
 ### Sorting and Data Type Consistency
 
 - Sorted data improves readability and accelerates grouping/aggregation operations.
-- Explicit integer type enforcement on `Year` minimises future errors.
+- Explicit integer type enforcement on `Year` minimises future errors
 
 ### Clean CSV Export
 
-- Saving without indices creates standardised files that are easier to handle in various environments.
+- Saving without indices creates standardised files that are easier to handle in various environments
 
 ---
 
@@ -73,14 +73,36 @@ This folder contains the original World Population dataset (`world_population.cs
 
 This cleaned dataset standardises population data for key countries and global totals:
 
-- The focus on 1980+ data aligns with most contemporary demographic and economic studies.
-- The long format supports flexible queries like growth rates, country comparisons, and integration with other datasets (GDP, emissions).
-- The structured and filtered data strongly supports reliable visualisations and forecasting.
+- The focus on 1980+ data aligns with most contemporary demographic and economic studies
+- The long format supports flexible queries like growth rates, country comparisons, and integration with other datasets (GDP, emissions)
+- The structured and filtered data strongly supports reliable visualisations and forecasting
+
+---
+
+## Unit Test
+
+This unit test in python file `` validates the population preprocessing pipeline
+
+- `def setUp(self)`
+  - Creates a sample wide-format dataframe with population data for India and Brazil (country, code, indicator, and yearly columns 1979–1981)
+
+- `test_filter_and_convert_to_long`
+  - Uses `world_population.filter` and `convert_to_long` and checks that:
+    - Only India remains after country filtering
+    - Only years greater than or equal to 1980 are kept (1980 and 1981 present, 1979 absent)
+    - Long-format output has columns `Country Name`, `Year`, `Population`
+    - Row count equals `rows_after_filter` × `number_of_year_columns`
+
+- `test_sort_and_fix_types`
+  - Verifies:
+    - `Year` is integer
+    - `Population` is numeric and an integer
+    - Data is sorted by `Country Name` then `Year`
 
 ---
 
 ## Requirements
 
-- Python (latest recommended version).
+- Python 
 - Library:
   - `pandas`
